@@ -1,11 +1,8 @@
 package world.anhgelus.lemondelivediscord
 
+import world.anhgelus.lemondelivediscord.config.Config
+
 
 fun main() {
-    val name = "Kotlin"
-    println("Hello, $name!")
-
-    for (i in 1..5) {
-        println("i = $i")
-    }
+    val config = Config.loadConfig()
 }

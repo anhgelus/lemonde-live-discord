@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.0.0"
+    kotlin("plugin.serialization") version "1.9.0"
 }
 
 group = "world.anhgelus.lemondelivediscord"
@@ -16,6 +17,7 @@ dependencies {
     }
     implementation("org.jsoup:jsoup:1.17.2")
     implementation("net.peanuuutz.tomlkt:tomlkt:0.3.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 }
 
 tasks.test {
