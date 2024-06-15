@@ -2,24 +2,24 @@ package world.anhgelus.lemondelivediscord.live
 
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import world.anhgelus.lemondelivediscord.utils.Logger
 import java.util.*
 
 class LiveParser(val url: String) {
     private val logger = Logger.get()
-    private var mainImage = ""
 
-    fun parse(document: Document) {
+    fun parse(document: Document, lastHour: String): PostData? {
         val last = document
             .getElementsByClass("post__live-section post-container")
             .select("section.post__live-container")
-            .first() ?: return
+            .first() ?: return null
 
         val info = last.getElementsByClass("info-content").first()
         val content = last.getElementsByClass("content--live").first()
         if (content == null) {
             logger.warn("Content live is null")
-            return
+            return null
         }
 
         val hour = if (info == null) {
@@ -34,12 +34,26 @@ class LiveParser(val url: String) {
                 "${instance.get(Calendar.HOUR_OF_DAY)}: ${instance.get(Calendar.MINUTE)}"
             }
         }
+
+        val title = content
+            .getElementsByClass("post__live-container--title post__space-node")
+            .first()
+            ?.text()
+            ?.trim()
+            ?: ""
+
+        if (hour.equals(lastHour, true)) {
+            logger.debug("No new post")
+            return null
+        }
+
+        logger.debug("New post")
     }
 
     fun updateMainImage(document: Document) {
         document.getElementsByClass("hero__live-img").first()?.allElements?.forEach {
             if (it.hasAttr("src")) {
-                mainImage = it.attr("src")
+                mainImage = it.attr("src").trim()
                 logger.info("Update main image")
             }
         }
@@ -76,5 +90,17 @@ class LiveParser(val url: String) {
 
     fun mustRefreshLink(document: Document): Boolean {
         return document.getElementsByClass("label__live label__live--off").size > 0
+    }
+
+    companion object {
+        var mainImage = ""
+            private set
+
+        fun isQuestion(content: Element): Boolean {
+            return content
+                .allElements
+                .stream()
+                .anyMatch { element -> element.hasClass("post__live-container--comment-content") }
+        }
     }
 }

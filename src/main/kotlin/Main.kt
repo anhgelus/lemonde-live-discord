@@ -18,6 +18,8 @@ fun main() {
 
     Logger.get().info("Bot started")
 
+    var lastHour = ""
+
     val timer = Timer()
     timer.schedule(0L, config.period * 60000L) {
         val parser = LiveParser(config.url)
@@ -27,6 +29,9 @@ fun main() {
             doc = parser.getDocument()
         }
         parser.updateMainImage(doc)
+        val data = parser.parse(doc, lastHour) ?: return@schedule
+        lastHour = data.lastHour
+        data.toEmbed()
     }
 }
 
