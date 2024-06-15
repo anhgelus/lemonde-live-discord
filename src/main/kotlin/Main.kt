@@ -1,8 +1,8 @@
 package world.anhgelus.lemondelivediscord
 
 import net.dv8tion.jda.api.JDABuilder
-import org.slf4j.LoggerFactory
 import world.anhgelus.lemondelivediscord.config.Config
+import world.anhgelus.lemondelivediscord.live.LiveParser
 import world.anhgelus.lemondelivediscord.utils.Logger
 import java.util.*
 import kotlin.concurrent.schedule
@@ -21,8 +21,12 @@ fun main() {
     val timer = Timer()
     timer.schedule(0L, config.period * 60000L) {
         val parser = LiveParser(config.url)
-        val doc = parser.getDocument()
-        if (parser.mustRefreshLink(doc)) config.url = parser.getNewLink(doc) ?: config.url
+        var doc = parser.getDocument()
+        if (parser.mustRefreshLink(doc)) {
+            config.url = parser.getNewLink(doc) ?: return@schedule
+            doc = parser.getDocument()
+        }
+        parser.updateMainImage(doc)
     }
 }
 
