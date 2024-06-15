@@ -15,6 +15,7 @@ dependencies {
         exclude(module="opus-java")
     }
     implementation("org.jsoup:jsoup:1.17.2")
+    implementation("net.peanuuutz.tomlkt:tomlkt:0.3.7")
 }
 
 tasks.test {
