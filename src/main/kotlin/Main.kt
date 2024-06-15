@@ -20,7 +20,9 @@ fun main() {
 
     val timer = Timer()
     timer.schedule(0L, config.period * 60000L) {
-
+        val parser = LiveParser(config.url)
+        val doc = parser.getDocument()
+        if (parser.mustRefreshLink(doc)) config.url = parser.getNewLink(doc) ?: config.url
     }
 }
 

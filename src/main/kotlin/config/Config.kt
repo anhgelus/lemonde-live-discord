@@ -15,7 +15,7 @@ data class Config(
     @TomlComment("""
         URL of Le Monde Live
     """)
-    val url: String,
+    var url: String,
     @TomlComment("""
         Period (in minutes) between two fetches
     """)
