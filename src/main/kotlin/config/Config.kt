@@ -15,7 +15,11 @@ data class Config(
     @TomlComment("""
         URL of Le Monde Live
     """)
-    val url: String
+    val url: String,
+    @TomlComment("""
+        Period (in minutes) between two fetches
+    """)
+    val period: Int
 ) {
     companion object {
         const val fileName = "config.toml"
