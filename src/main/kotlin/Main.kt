@@ -1,9 +1,9 @@
-package world.anhgelus.lemonde-live-discord
+package world.anhgelus.lemondelivediscord
 
 
 fun main() {
     val name = "Kotlin"
-    println("Hello, " + name + "!")
+    println("Hello, $name!")
 
     for (i in 1..5) {
         println("i = $i")
